@@ -1,45 +1,54 @@
 class Vehicle {
-  status = "stopped";
-
-  constructor(make, model, wheels) {
+  constructor(make, model, year, status) {
     this.make = make;
     this.model = model;
-    this.wheels = wheels;
+    this.year = year;
+    this.status = status;
   }
-  start() {
-    this.status = "started";
-  }
-  stop() {
-    this.status = "stopped";
+
+  printStatus() {
+    console.log(`The ${this.make} ${this.model} is currently ${this.status}.`);
   }
 }
 
 class Car extends Vehicle {
-  constructor(make, model) {
-    super(make, model, "four");
+  constructor(make, model, year, status, doors) {
+    super(make, model, year, status);
+    this.doors = doors;
+  }
+
+  printStatus() {
+    console.log(`The ${this.make} ${this.model} has ${this.doors} doors and is ${this.status}.`);
   }
 }
 
 class MotorCycle extends Vehicle {
-  constructor(make, model) {
-    super(make, model, 2);
+  constructor(make, model, year, status, sidecar) {
+    super(make, model, year, status);
+    this.sidecar = sidecar;
+  }
+
+  printStatus() {
+    console.log(`The ${this.make} ${this.model} does ${this.sidecar ? "" : "not "}have a sidecar and is ${this.status}.`);
   }
 }
 
 function printStatus(vehicle) {
-  if (vehicle.status === "running") {
-    console.log("The vehicle is running.");
-  } else {
-    console.log("The vehicle is stopped.");
-  }
+  vehicle.printStatus();
 }
 
-const myHarley = new MotorCycle("Harley-Davidson", "Low Rider S");
-myHarley.start();
-printStatus(myHarley);
-console.log(myHarley.make.toUppercase());
+// Errors below - these will be caught by TypeScript
+const myVehicle = new Vehicle("Toyota", "Camry", 2020, "hello");
+printStatus(myVehicle);
 
-const myBuick = new Car("Buick", "Regal");
-myBuick.wheels = myBuick.wheels - 1;
-console.log(myBuick.wheels);
-console.log(myBuick.mdl);
+const myCar = new Car("Honda", "Civic", 2021, "running", 4);
+printStatus(myCar);
+
+const myMotorCycle = new MotorCycle("Harley", "Sportster", 2022, "stopped", true);
+printStatus(myMotorCycle);
+
+// This will cause an error - passing wrong type
+printStatus("not a vehicle");
+
+// This will cause errors - invalid status value
+const badVehicle = new Vehicle("Ford", "Mustang", 2022, "racing");
